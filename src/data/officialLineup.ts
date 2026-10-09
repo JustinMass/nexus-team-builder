@@ -1,11 +1,11 @@
-export const officialVersion='2026-10-08.1';
+export const officialVersion='2026-10-08.2';
 export const officialDate='October 8, 2026';
 export const officialLineup = Object.freeze({
   teams:Object.freeze([
-    Object.freeze(['papij','mookie','mrbuttlips','flowzirrah']),
-    Object.freeze(['morgause','sypher','ksha','maciel']),
-    Object.freeze(['creggers','ameliakitty','kereschar','herbstwind']),
-    Object.freeze(['marisze','kitkat','jfg','seukumiyadora']),
+    Object.freeze(['papij','morgause','flowzirrah','kevon']),
+    Object.freeze(['mookie','mrbuttlips','maciel','caliman']),
+    Object.freeze(['sypher','ameliakitty','kereschar','lobuz']),
+    Object.freeze(['ksha','creggers','herbstwind','anc1ent']),
   ]),
-  reserves:Object.freeze(['morganna','mdnght','serfenox','critfricker','aceek','kevon','nachile','lobuz','kankudai','anc1ent','caliman','saage','kingrunner','redgoat']),
+  reserves:Object.freeze(['morganna','marisze','kitkat','jfg','seukumiyadora','mdnght','serfenox','critfricker','aceek','nachile','kankudai','saage','kingrunner','redgoat']),
 });

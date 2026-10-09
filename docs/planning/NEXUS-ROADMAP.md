@@ -4,11 +4,11 @@
 - Repo: JustinMass/nexus-team-builder
 - Base/working branch: main
 - Tracking branch: origin/main
-- Current implementation checkpoint: 4fc4c5231ab0acfa13aa41069361e9231676080f (completed Plan 001); the scoped hosting/documentation retirement checkpoint is the commit containing the hosting authority update below. Resolve the latest full SHA with git rev-parse HEAD rather than storing a self-referential commit hash.
+- Current implementation base: 0d4d437304c38869d353dd998d3faeb254f5b63f (hosting retirement); the current scoped official-lineup update is the commit containing version 2026-10-08.2. Resolve the latest full SHA with git rev-parse HEAD rather than storing a self-referential commit hash.
 - Last completed plan: [001-initial-team-builder.md](plans/001-initial-team-builder.md)
 - Active plan: none; Plan 001 complete
 - Next expected work: STOP; await explicit user scope. No Plan 002 created or executed.
-- Last validation (scoped hosting cleanup, 2026-10-08): npm test 51 passed / 0 failed; npm run typecheck, npm run build, npm run validate-data and git diff --check PASS. Lint and a separate validate script are not configured. Only four documentation files changed; application code/data, deployment workflows and the retained Sites manifest are unchanged. Anonymous network verification: Cloudflare HTTP 200, retired Sites HTTP 401.
+- Last validation (official lineup update, 2026-10-08): npm test 52 passed / 0 failed; npm run typecheck, npm run build (including canonical validation) and git diff --check PASS. Approved assignments/reserve ordering have an exact regression; totals, compositions, moves, reset, UI and Discord expectations are current. Rankings/player facts, UI behavior and hosting settings are unchanged. Lint and a separate validate script are not configured. Cloudflare's user-provided production view confirms automatic main deployments enabled and successful deployment of the preceding hosting-cleanup checkpoint.
 - Deployment URL/status: canonical production https://nexus-team-builder.pages.dev/ (HTTP 200 verified); secondary/fallback https://justinmass.github.io/nexus-team-builder/. ChatGPT Sites is retired/private: owner-only custom access verified, no viewer groups or external visitors; unauthenticated old-URL request returned HTTP 401. Existing project preserved, no replacement or republication.
 
 ## Hosting authority
@@ -20,7 +20,16 @@ Retired ChatGPT Sites hostname (management/history only, not a public destinatio
 Automatically read roadmap and active plan before substantive work. Code/tests/data are executable truth; roadmap is scope/history/continuity truth. Important context lives in the repository, not only chat. One plan is one logical chunk; update it instead of replacing it. Commit planning and implementation together when practical. Stop before the next plan.
 
 ## Product invariants
-Sword x Staff Nexus Tournament: four teams of at most four players, with all other players in ordered reserves. Official teams are initially the 16 highest-power active players. Morganna remains rank 16, 29.8M, Templar, inactive, initially in reserves; SeukuMiyadora is the 16th active player. Manual inactive assignment is allowed with a persistent badge. Initial totals: 175.7M, 135.0M, 125.5M, 120.2M, computed at runtime.
+Sword x Staff Nexus Tournament: four teams of at most four players, with all other players in ordered reserves. Official assignments are maintained separately from rankings and may be chosen manually by the maintainer. The initial Plan-001 lineup used the 16 highest-power active players; the optional top-active generator still skips inactive players generically. Morganna remains rank 16, 29.8M, Templar, inactive, in official reserves; SeukuMiyadora remains the 16th active player by power but is now an official reserve. Manual inactive assignment in custom drafts is allowed with a persistent badge.
+
+Current official version 2026-10-08.2 (October 8, 2026) matches the user's approved exported assignment and ordering:
+- Team 1: PapiJ, Morgause, Flowzirrah, Kevon — 149.9M.
+- Team 2: Mookie, MrButtLips, Maciel, Caliman — 147.2M.
+- Team 3: Sypher, AmeliaKitty, KeresChar, Lobuz — 124.2M.
+- Team 4: KsHa, Creggers, Herbstwind, Anc1ent — 122.4M.
+- Reserves: Morganna, Marisze, KitKat, JFG, SeukuMiyadora, Mdnght, Serfenox, CritFricker, aceek, NaChile, Kankudai, Saage, KingRunner, RedGoat.
+
+All totals are computed at runtime. Historical initial Plan-001 totals were 175.7M, 135.0M, 125.5M and 120.2M. Player rankings/power/classes/status are unchanged by this official assignment update. Saved personal drafts and shared links retain their own assignments; Reset to Official loads the current official lineup. No Plan 002 created or executed.
 
 Official imported assignment is immutable. Browser custom/shared state never publishes an official change. Full-team player-target drops swap; full-team background drops reject. Versioned validated local drafts and URL hashes encode IDs/ordering only, never player facts. Discord export reflects visible state and inactive status. No backend/database/authentication for v1.
 

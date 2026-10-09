@@ -6,8 +6,9 @@ import { cloneOfficial, generateTopActive, movePlayer, historyReducer, initialHi
 import { totalPower, composition } from './calculations';
 import { validatePlayers, validateLineup } from './validation';
 describe('canonical official source', () => {
-  [175.7,135.0,125.5,120.2].forEach((expected,i)=>it(`Team ${i+1} total = ${expected}`,()=>expect(totalPower(officialLineup.teams[i])).toBe(expected)));
-  it('official compositions',()=>expect(officialLineup.teams.map(composition)).toEqual(['2 Templars / 2 Magisters','1 Ravager / 1 Magister / 2 Prophets','2 Magisters / 2 Prophets','2 Ravagers / 1 Magister / 1 Prophet']));
+  [149.9,147.2,124.2,122.4].forEach((expected,i)=>it(`Team ${i+1} total = ${expected}`,()=>expect(totalPower(officialLineup.teams[i])).toBe(expected)));
+  it('official compositions',()=>expect(officialLineup.teams.map(composition)).toEqual(['2 Templars / 1 Magister / 1 Prophet','2 Templars / 1 Magister / 1 Prophet','1 Templar / 2 Magisters / 1 Prophet','1 Templar / 1 Ravager / 1 Magister / 1 Prophet']));
+  it('official assignment and reserve order match the approved export',()=>expect(cloneOfficial()).toEqual({teams:[['papij','morgause','flowzirrah','kevon'],['mookie','mrbuttlips','maciel','caliman'],['sypher','ameliakitty','kereschar','lobuz'],['ksha','creggers','herbstwind','anc1ent']],reserves:['morganna','marisze','kitkat','jfg','seukumiyadora','mdnght','serfenox','critfricker','aceek','nachile','kankudai','saage','kingrunner','redgoat']}));
   it('Morganna inactive',()=>expect(playerById.morganna.status).toBe('inactive'));
   it('Morganna reserved',()=>expect(officialLineup.reserves).toContain('morganna'));
   it('top active skips inactive and includes SeukuMiyadora 16th',()=>{const ids=generateTopActive().teams.flat();expect(ids).not.toContain('morganna');expect(ids[15]).toBe('seukumiyadora')});
@@ -24,9 +25,9 @@ describe('safe moves and history',()=>{
   it('team to team',()=>{let l=cloneOfficial();l=movePlayer(l,'maciel','reserves').lineup;const r=movePlayer(l,'papij','team-1');expect(r.lineup.teams[1]).toContain('papij');expect(r.lineup.teams[0]).not.toContain('papij')});
   it('reserve to team',()=>{const l=movePlayer(cloneOfficial(),'papij','reserves').lineup;expect(movePlayer(l,'mdnght','team-0').lineup.teams[0]).toContain('mdnght')});
   it('team to reserve',()=>expect(movePlayer(cloneOfficial(),'papij','reserves').lineup.reserves).toContain('papij'));
-  it('full-team targeted swap preserves exact slots',()=>{const r=movePlayer(cloneOfficial(),'morgause','team-0','mookie').lineup;expect(r.teams[0]).toEqual(['papij','morgause','mrbuttlips','flowzirrah']);expect(r.teams[1]).toEqual(['mookie','sypher','ksha','maciel'])});
+  it('full-team targeted swap preserves exact slots',()=>{const r=movePlayer(cloneOfficial(),'mookie','team-0','morgause').lineup;expect(r.teams[0]).toEqual(['papij','mookie','flowzirrah','kevon']);expect(r.teams[1]).toEqual(['morgause','mrbuttlips','maciel','caliman'])});
   it('full-team background drop rejects with unchanged state',()=>{const l=cloneOfficial();const r=movePlayer(l,'mdnght','team-0');expect(r.lineup).toEqual(l);expect(r.error).toMatch(/full/i)});
-  it('team reordering',()=>expect(movePlayer(cloneOfficial(),'papij','team-0','flowzirrah').lineup.teams[0]).toEqual(['mookie','mrbuttlips','flowzirrah','papij']));
+  it('team reordering',()=>expect(movePlayer(cloneOfficial(),'papij','team-0','flowzirrah').lineup.teams[0]).toEqual(['morgause','flowzirrah','papij','kevon']));
   it('reserve reordering',()=>{const l=cloneOfficial();expect(movePlayer(l,'redgoat','reserves','morganna').lineup.reserves[0]).toBe('redgoat')});
   it('inactive manual assignment retains source status',()=>{const l=movePlayer(cloneOfficial(),'papij','reserves').lineup;expect(movePlayer(l,'morganna','team-0').lineup.teams[0]).toContain('morganna');expect(playerById.morganna.status).toBe('inactive')});
   it('official source stays immutable after working edits',()=>{const before=JSON.stringify(officialLineup);movePlayer(cloneOfficial(),'papij','reserves');expect(JSON.stringify(officialLineup)).toBe(before);expect(Object.isFrozen(officialLineup.teams[0])).toBe(true)});
