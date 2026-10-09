@@ -34,5 +34,5 @@ export default function App(){
         <div className="lineup-board"><div className="team-grid">{state.present.teams.map((ids,i)=><TeamPanel key={i} ids={ids} index={i} onMove={onMove}/>)}</div><ReservePool ids={state.present.reserves} onMove={onMove}/></div>
         <DragOverlay dropAnimation={null}>{dragged&&<PlayerPreview id={dragged}/>}</DragOverlay>
       </DndContext>
-    </main><footer><span>Sword × Staff · Nexus Tournament</span><span>{state.mode==='custom'?'Draft saved on this device':state.mode==='shared'?'Shared configuration · edits create a local draft':'Official source · browser edits stay personal'}</span></footer></div>
+    </main><footer><span>Sword × Staff · Nexus Tournament</span><span>{state.mode==='custom'?'Personal draft · official lineup unchanged':state.mode==='shared'?'Shared configuration · edits create a local draft':'Official source · browser edits stay personal'}</span></footer></div>
 }

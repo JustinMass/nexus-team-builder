@@ -2,8 +2,8 @@
 
 Public Sword x Staff Nexus Tournament utility: four teams of up to four players, ordered reserves, local custom drafts, shared links and Discord markdown. GitHub is the authoritative source; official updates require a repository commit.
 
-- Primary site: https://nexus-team-builder.jmass1991.chatgpt.site (publication pending)
-- Secondary GitHub Pages: https://justinmass.github.io/nexus-team-builder/ (deployment pending)
+- Primary public site: https://nexus-team-builder.jmass1991.chatgpt.site
+- Secondary GitHub Pages: https://justinmass.github.io/nexus-team-builder/
 - Repository: https://github.com/JustinMass/nexus-team-builder
 
 ## Local setup and commands
@@ -59,3 +59,5 @@ Current names, previous class mappings, canonical colors and Discord emojis are 
 Sites serves the Vite `dist/` build as public static assets. Its source repository is a publishing mirror of this GitHub checkout. Preserve `.openai/hosting.json` identity and use the bundled Sites workflow to push exact source and package the build before saving/deploying a version. Do not put credentials in the repository.
 
 GitHub Pages uses `.github/workflows/pages.yml` on main: npm ci, tests, typecheck, canonical validation/build, upload and deployment. The Pages source setting must be GitHub Actions. The workflow uses the correct `/nexus-team-builder/` base path.
+
+Plan 001 validation: 51 tests passed, zero failed; typecheck, canonical validation, production build and git diff --check passed. Dependency audit: zero vulnerabilities. GitHub Pages was enabled and its first workflow completed successfully. Sites public publication was verified through its native deployment result. No separate lint configuration exists.

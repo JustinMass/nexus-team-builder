@@ -15,7 +15,7 @@ Build a compact public tournament utility with immutable official data, custom b
 - [x] Phase 3: Moves, swaps, reorder and history
 - [x] Phase 4: Persistence and sharing
 - [x] Phase 5: Exports and responsive working UI
-- [ ] Phase 6: Validation, documentation and publication
+- [x] Phase 6: Validation, documentation and publication
 
 **Phases**
 1. **Phase 1: Scaffold and canonical model**
@@ -63,9 +63,9 @@ Build a compact public tournament utility with immutable official data, custom b
    - **Files/Functions to Modify/Create:** README, .github/workflows, .openai/hosting, this plan and roadmap.
    - **Tests to Write:** full suite, typecheck, canonical build checks, diff/status.
    - **Tasks:**
-      - [ ] Run full validation, document actual results, commit/push, publish and verify.
-   - **Status:** In progress
-   - **Review/Validation:** Pending
+      - [x] Run full validation, document actual results, commit/push, publish and verify.
+   - **Status:** Complete
+   - **Review/Validation:** PASS. 51 tests passed, 0 failed; npm run typecheck, npm run build (including canonical validation), git diff --check passed. No lint configured. Dependency audit zero vulnerabilities. Local preview HTTP 200; desktop/mobile layout inspected with no horizontal overflow. GitHub origin verified and initial commit df3a0ac0d810c2e46ee6365551d675faab08c539 pushed. GitHub Pages workflow 37869259364 succeeded. Public Sites version 1 deployed successfully from the same source SHA; completion checkpoint mirrors the final source and updated records.
 
 **Open Questions**
 - Hosting adaptation resolved by user: normal Sites hosting is accepted; GitHub remains source of truth. Preserve a secondary Pages workflow.
@@ -73,8 +73,10 @@ Build a compact public tournament utility with immutable official data, custom b
 **Lessons**
 - The Sites installer could not resolve npm on Windows -> invoke the installed npm CLI explicitly. Focused tests need subprocess permissions in this environment.
 - Dependency audit found advisories in the initially selected test runner -> upgraded to Vitest 5.0.3; zero vulnerabilities remain.
+- The bundled packager first lacked Bash, then interpreted a Windows drive letter as a remote archive -> supply Git Bash on PATH and TAR_OPTIONS=--force-local; validated packaging and publication succeeded. Expired Sites credentials were renewed for the same project, without creating another Site.
+- DnD exposes its own accessibility status region -> scope interface feedback assertions by accessible name. Strict TypeScript caught collision-container lookup and action-union narrowing; corrected before full validation.
 
 **Final Summary**
-- Overall result: In progress
-- Final validation: Pending
-- Remaining blockers: none known
+- Overall result: Complete. Requested canonical data, immutable official assignment, custom moves/swaps/history, inactive handling, local drafts, sharing, Discord/JSON export, responsive UI, durable planning, public repository and both deployments delivered. No Plan 002 created or executed.
+- Final validation: 51 passing / 0 failing tests; strict typecheck, canonical validation, production build and git diff --check PASS. Lint not configured. No private screenshots, credentials or temporary artifacts tracked. Initial implementation SHA df3a0ac0d810c2e46ee6365551d675faab08c539; completion checkpoint is the commit containing this update (full SHA reported in handoff).
+- Remaining blockers: none. Sites is a deployment mirror; future official changes are committed to GitHub, Pages deploys automatically, and Sites must be republished through its workflow.
