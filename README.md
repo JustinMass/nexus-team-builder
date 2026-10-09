@@ -2,8 +2,8 @@
 
 Public Sword x Staff Nexus Tournament utility: four teams of up to four players, ordered reserves, local custom drafts, shared links and Discord markdown. GitHub is the authoritative source; official updates require a repository commit.
 
-- Primary public site: https://nexus-team-builder.jmass1991.chatgpt.site
-- Secondary GitHub Pages: https://justinmass.github.io/nexus-team-builder/
+- Primary / canonical public site: https://nexus-team-builder.pages.dev/
+- Secondary / fallback GitHub Pages: https://justinmass.github.io/nexus-team-builder/
 - Repository: https://github.com/JustinMass/nexus-team-builder
 
 ## Local setup and commands
@@ -20,11 +20,11 @@ npm run build
 npm run preview
 ```
 
-React + TypeScript + Vite, @dnd-kit, Lucide icons and Vitest. No backend, database, login or state-management framework. There is no separate lint configuration; strict TypeScript, tests, canonical validation and whitespace checks are the current gates. Vite's relative asset base supports Sites root hosting; the Pages workflow explicitly builds with `/nexus-team-builder/`.
+React + TypeScript + Vite, @dnd-kit, Lucide icons and Vitest. No backend, database, login or state-management framework. There is no separate lint configuration; strict TypeScript, tests, canonical validation and whitespace checks are the current gates. Vite's relative asset base supports Cloudflare Pages root hosting; the GitHub Pages workflow explicitly builds with `/nexus-team-builder/`.
 
 ## Directory layout
 
-`src/components/` holds the working interface; `src/config/season.ts` owns class metadata; `src/data/` holds canonical player facts and official assignments; `src/domain/` holds pure calculations, moves, validation, serialization and Discord generation; `src/hooks/useLineup.ts` owns browser state/history/storage. `scripts/validate-data.ts` validates canonical data during every build. `docs/planning/` holds durable project continuity. `.openai/hosting.json` holds Sites identity and the static build directory; `dist/` is generated and ignored.
+`src/components/` holds the working interface; `src/config/season.ts` owns class metadata; `src/data/` holds canonical player facts and official assignments; `src/domain/` holds pure calculations, moves, validation, serialization and Discord generation; `src/hooks/useLineup.ts` owns browser state/history/storage. `scripts/validate-data.ts` validates canonical data during every build. `docs/planning/` holds durable project continuity. `.openai/hosting.json` is retained solely to identify/manage the retired private ChatGPT Sites project; it is not an active deployment target. `dist/` is generated and ignored.
 
 ## Official vs custom authority
 
@@ -44,7 +44,7 @@ Normally edit `src/data/players.ts`: stable ID, server rank, current name, numer
 
 ## Updating the official lineup
 
-Normally edit `src/data/officialLineup.ts`, separately from player objects. Update assignments/order and the official version/date. All 30 IDs must occur exactly once, teams must contain no more than four IDs, and the initial official source excludes inactive players. Maintenance loop: experiment on the public site, export Draft JSON, paste it to Codex, update official source and planning context, run `npm test` and `npm run build`, commit/push main. GitHub Pages deploys automatically. Republish Sites through the Sites workflow to update the primary site; GitHub pushes alone do not update Sites.
+Normally edit `src/data/officialLineup.ts`, separately from player objects. Update assignments/order and the official version/date. All 30 IDs must occur exactly once, teams must contain no more than four IDs, and the initial official source excludes inactive players. Maintenance loop: experiment on the canonical public site, export Draft JSON, paste it to Codex, update official source and planning context, run validation, then commit/push main. Cloudflare Pages automatically deploys the primary site; GitHub Pages deploys the secondary site.
 
 ## Changing seasons/classes
 
@@ -56,8 +56,16 @@ Current names, previous class mappings, canonical colors and Discord emojis are 
 
 ## Deployment
 
-Sites serves the Vite `dist/` build as public static assets. Its source repository is a publishing mirror of this GitHub checkout. Preserve `.openai/hosting.json` identity and use the bundled Sites workflow to push exact source and package the build before saving/deploying a version. Do not put credentials in the repository.
+GitHub is the source of truth. Cloudflare Pages is the canonical public deployment at https://nexus-team-builder.pages.dev/ and deploys from this repository's main branch. For normal updates:
+
+1. Change canonical source data/code and relevant planning context.
+2. Run `npm test`, `npm run typecheck`, `npm run build` (including canonical validation), and `git diff --check`.
+3. Commit and push main.
+4. Cloudflare Pages automatically deploys the primary site.
+5. GitHub Pages remains an automatic secondary/fallback deployment.
+
+The former ChatGPT Sites deployment is retired and private. Its access was changed to an owner-only custom allowlist, and an unauthenticated request returned HTTP 401. The project was preserved. `.openai/hosting.json` remains unchanged solely for identification/management; do not republish it or create a replacement ChatGPT Site during normal updates unless the user explicitly requests that in the future. Do not put credentials in the repository.
 
 GitHub Pages uses `.github/workflows/pages.yml` on main: npm ci, tests, typecheck, canonical validation/build, upload and deployment. The Pages source setting must be GitHub Actions. The workflow uses the correct `/nexus-team-builder/` base path.
 
-Plan 001 validation: 51 tests passed, zero failed; typecheck, canonical validation, production build and git diff --check passed. Dependency audit: zero vulnerabilities. GitHub Pages was enabled and its first workflow completed successfully. Sites public publication was verified through its native deployment result. No separate lint configuration exists.
+Historical Plan 001 validation: 51 tests passed, zero failed; typecheck, canonical validation, production build and git diff --check passed. Dependency audit: zero vulnerabilities. GitHub Pages was enabled and its first workflow completed successfully. The original Sites publication was verified at that checkpoint; it is now retired/private. No separate lint configuration exists.

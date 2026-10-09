@@ -4,12 +4,17 @@
 - Repo: JustinMass/nexus-team-builder
 - Base/working branch: main
 - Tracking branch: origin/main
-- Current implementation checkpoint: df3a0ac0d810c2e46ee6365551d675faab08c539 (initial implementation); final publication/continuity checkpoint is the commit containing this Plan-001 completion update. Resolve the latest full SHA with git rev-parse HEAD rather than storing a self-referential commit hash.
+- Current implementation checkpoint: 4fc4c5231ab0acfa13aa41069361e9231676080f (completed Plan 001); the scoped hosting/documentation retirement checkpoint is the commit containing the hosting authority update below. Resolve the latest full SHA with git rev-parse HEAD rather than storing a self-referential commit hash.
 - Last completed plan: [001-initial-team-builder.md](plans/001-initial-team-builder.md)
 - Active plan: none; Plan 001 complete
 - Next expected work: STOP; await explicit user scope. No Plan 002 created or executed.
-- Last validation: 51 tests passed / 0 failed; typecheck, canonical validation, production build and whitespace checks PASS. Lint not configured. Dependency audit zero vulnerabilities.
-- Deployment URL/status: public Sites https://nexus-team-builder.jmass1991.chatgpt.site verified succeeded; GitHub Pages https://justinmass.github.io/nexus-team-builder/ deployed successfully by workflow 37869259364 from the initial implementation SHA. Both are republished from the completion checkpoint.
+- Last validation (scoped hosting cleanup, 2026-10-08): npm test 51 passed / 0 failed; npm run typecheck, npm run build, npm run validate-data and git diff --check PASS. Lint and a separate validate script are not configured. Only four documentation files changed; application code/data, deployment workflows and the retained Sites manifest are unchanged. Anonymous network verification: Cloudflare HTTP 200, retired Sites HTTP 401.
+- Deployment URL/status: canonical production https://nexus-team-builder.pages.dev/ (HTTP 200 verified); secondary/fallback https://justinmass.github.io/nexus-team-builder/. ChatGPT Sites is retired/private: owner-only custom access verified, no viewer groups or external visitors; unauthenticated old-URL request returned HTTP 401. Existing project preserved, no replacement or republication.
+
+## Hosting authority
+GitHub origin https://github.com/JustinMass/nexus-team-builder is authoritative. Cloudflare Pages deploys the canonical public website from main; use https://nexus-team-builder.pages.dev/ for normal users. GitHub Pages remains a secondary/fallback automatic deployment at https://justinmass.github.io/nexus-team-builder/. Normal updates validate source, commit and push main; the configured deployments handle publication.
+
+Retired ChatGPT Sites hostname (management/history only, not a public destination): nexus-team-builder.jmass1991.chatgpt.site. Private access was verified through the authenticated Sites API and anonymous HTTP 401. The old project MUST NOT be republished without an explicit future user request, and normal app updates must not create another ChatGPT Site. `.openai/hosting.json` is retained unchanged because its exact project ID is useful for managing the retired project; it is not an active deployment target. Cloudflare and GitHub Pages settings were not changed during this scoped task. Plan 001 remains complete; no Plan 002 created or executed.
 
 ## Planning workflow
 Automatically read roadmap and active plan before substantive work. Code/tests/data are executable truth; roadmap is scope/history/continuity truth. Important context lives in the repository, not only chat. One plan is one logical chunk; update it instead of replacing it. Commit planning and implementation together when practical. Stop before the next plan.
@@ -26,7 +31,7 @@ Official imported assignment is immutable. Browser custom/shared state never pub
 - Source prompt: user-supplied current rankings and requirements, 2026-10-08. No raw screenshots are tracked.
 
 ## Completed / planned chunks
-001 — initial team builder, sharing, exports, planning and publication (complete). Four team panels and reserves; safe DnD with full-team targeted swaps; mouse/touch/keyboard and selectors; official/custom/shared labels; undo/redo/reset; validated storage; deterministic share hashes; Discord and maintainer exports; source data and planning; public Sites and automatic Pages deployment.
+001 — initial team builder, sharing, exports, planning and publication (complete). Four team panels and reserves; safe DnD with full-team targeted swaps; mouse/touch/keyboard and selectors; official/custom/shared labels; undo/redo/reset; validated storage; deterministic share hashes; Discord and maintainer exports; source data and planning; original public Sites and automatic GitHub Pages deployment. The original Sites hosting is historical and superseded by the current hosting authority above.
 
 ## Deferred / possible future work
 Official history, admin/editor workflow, Discord login, community lineups/voting, additional seasons and historical mappings are deferred, not planned. Do not invent a Plan 002.

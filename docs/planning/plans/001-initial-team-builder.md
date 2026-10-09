@@ -2,6 +2,8 @@
 
 Build a compact public tournament utility with immutable official data, custom browser drafts, targeted swaps, share URLs and Discord exports. Bootstrap durable repository planning modeled on papis-power-pull's feature/relic-optimizer-v2 branch. Publish through Sites with GitHub as authoritative source and Pages as a secondary deployment.
 
+Historical completed Plan 001: the original Sites publication below records what was delivered at that checkpoint. Current hosting is superseded by [the roadmap's hosting authority](../NEXUS-ROADMAP.md): Cloudflare Pages is canonical, GitHub Pages is secondary, and the preserved ChatGPT Sites project is retired/private. Do not republish it during normal updates.
+
 **Branch Context**
 - Repo: JustinMass/nexus-team-builder
 - Base Branch: main
@@ -79,4 +81,4 @@ Build a compact public tournament utility with immutable official data, custom b
 **Final Summary**
 - Overall result: Complete. Requested canonical data, immutable official assignment, custom moves/swaps/history, inactive handling, local drafts, sharing, Discord/JSON export, responsive UI, durable planning, public repository and both deployments delivered. No Plan 002 created or executed.
 - Final validation: 51 passing / 0 failing tests; strict typecheck, canonical validation, production build and git diff --check PASS. Lint not configured. No private screenshots, credentials or temporary artifacts tracked. Initial implementation SHA df3a0ac0d810c2e46ee6365551d675faab08c539; completion checkpoint is the commit containing this update (full SHA reported in handoff).
-- Remaining blockers: none. Sites is a deployment mirror; future official changes are committed to GitHub, Pages deploys automatically, and Sites must be republished through its workflow.
+- Remaining blockers at Plan-001 completion: none. The then-current Sites deployment mirror was subsequently retired/private in the scoped hosting cleanup. Future updates follow the roadmap's current Cloudflare/GitHub Pages hosting authority, not the historical Sites workflow.
