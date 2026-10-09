@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.sites-runtime/
+.sites-checkout/
+work/
+*.log
+.env*
+!.env.example

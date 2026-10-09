@@ -1,0 +1,36 @@
+import { describe, it, expect } from 'vitest';
+import { players, playerById } from '../data/players';
+import { classes } from '../config/season';
+import { officialLineup } from '../data/officialLineup';
+import { cloneOfficial, generateTopActive, movePlayer, historyReducer, initialHistory } from './lineup';
+import { totalPower, composition } from './calculations';
+import { validatePlayers, validateLineup } from './validation';
+describe('canonical official source', () => {
+  [175.7,135.0,125.5,120.2].forEach((expected,i)=>it(`Team ${i+1} total = ${expected}`,()=>expect(totalPower(officialLineup.teams[i])).toBe(expected)));
+  it('official compositions',()=>expect(officialLineup.teams.map(composition)).toEqual(['2 Templars / 2 Magisters','1 Ravager / 1 Magister / 2 Prophets','2 Magisters / 2 Prophets','2 Ravagers / 1 Magister / 1 Prophet']));
+  it('Morganna inactive',()=>expect(playerById.morganna.status).toBe('inactive'));
+  it('Morganna reserved',()=>expect(officialLineup.reserves).toContain('morganna'));
+  it('top active skips inactive and includes SeukuMiyadora 16th',()=>{const ids=generateTopActive().teams.flat();expect(ids).not.toContain('morganna');expect(ids[15]).toBe('seukumiyadora')});
+  it('central config has supplied T5 colors and previous mappings',()=>expect(classes.map(c=>[c.name,c.previousName,c.color])).toEqual([['Templar','Guardian','#FD8805'],['Ravager','Conqueror','#FF6162'],['Magister','Destroyer','#658BFA'],['Prophet','Dominator','#44D1AB']]));
+  it('validates official catalog and assignments',()=>{expect(()=>validatePlayers(players)).not.toThrow();expect(validateLineup(officialLineup)).toBe(true)});
+  it('rejects duplicate player IDs',()=>expect(()=>validatePlayers([...players,players[0]])).toThrow());
+  it('rejects unknown class',()=>expect(()=>validatePlayers([{...players[0],class:'unknown'}] as never)).toThrow());
+  it('rejects nonfinite power',()=>expect(()=>validatePlayers([{...players[0],power:NaN}])).toThrow());
+  it('rejects duplicate assignment',()=>{const l=cloneOfficial();l.teams[0][0]=l.teams[1][0];expect(validateLineup(l)).toBe(false)});
+  it('rejects unknown player',()=>{const l=cloneOfficial();l.reserves[0]='ghost';expect(validateLineup(l)).toBe(false)});
+  it('rejects overfilled team',()=>{const l=cloneOfficial();l.teams[0].push(l.reserves.shift()!);expect(validateLineup(l)).toBe(false)});
+});
+describe('safe moves and history',()=>{
+  it('team to team',()=>{let l=cloneOfficial();l=movePlayer(l,'maciel','reserves').lineup;const r=movePlayer(l,'papij','team-1');expect(r.lineup.teams[1]).toContain('papij');expect(r.lineup.teams[0]).not.toContain('papij')});
+  it('reserve to team',()=>{const l=movePlayer(cloneOfficial(),'papij','reserves').lineup;expect(movePlayer(l,'mdnght','team-0').lineup.teams[0]).toContain('mdnght')});
+  it('team to reserve',()=>expect(movePlayer(cloneOfficial(),'papij','reserves').lineup.reserves).toContain('papij'));
+  it('full-team targeted swap preserves exact slots',()=>{const r=movePlayer(cloneOfficial(),'morgause','team-0','mookie').lineup;expect(r.teams[0]).toEqual(['papij','morgause','mrbuttlips','flowzirrah']);expect(r.teams[1]).toEqual(['mookie','sypher','ksha','maciel'])});
+  it('full-team background drop rejects with unchanged state',()=>{const l=cloneOfficial();const r=movePlayer(l,'mdnght','team-0');expect(r.lineup).toEqual(l);expect(r.error).toMatch(/full/i)});
+  it('team reordering',()=>expect(movePlayer(cloneOfficial(),'papij','team-0','flowzirrah').lineup.teams[0]).toEqual(['mookie','mrbuttlips','flowzirrah','papij']));
+  it('reserve reordering',()=>{const l=cloneOfficial();expect(movePlayer(l,'redgoat','reserves','morganna').lineup.reserves[0]).toBe('redgoat')});
+  it('inactive manual assignment retains source status',()=>{const l=movePlayer(cloneOfficial(),'papij','reserves').lineup;expect(movePlayer(l,'morganna','team-0').lineup.teams[0]).toContain('morganna');expect(playerById.morganna.status).toBe('inactive')});
+  it('official source stays immutable after working edits',()=>{const before=JSON.stringify(officialLineup);movePlayer(cloneOfficial(),'papij','reserves');expect(JSON.stringify(officialLineup)).toBe(before);expect(Object.isFrozen(officialLineup.teams[0])).toBe(true)});
+  it('undo and redo',()=>{const h=initialHistory();const changed=historyReducer(h,{type:'move',id:'papij',destination:'reserves'});const undone=historyReducer(changed,{type:'undo'});expect(undone.present).toEqual(h.present);expect(historyReducer(undone,{type:'redo'}).present).toEqual(changed.present)});
+  it('reset official clears history and reserves inactive',()=>{const h=historyReducer(historyReducer(initialHistory(),{type:'move',id:'papij',destination:'reserves'}),{type:'reset'});expect(h.present).toEqual(cloneOfficial());expect(h.mode).toBe('official');expect(h.past).toEqual([])});
+  it('failed moves do not switch official to custom',()=>expect(historyReducer(initialHistory(),{type:'move',id:'mdnght',destination:'team-0'}).mode).toBe('official'));
+});
