@@ -5,8 +5,8 @@ export interface ReadonlyLineup {readonly teams:readonly (readonly string[])[]; 
 export function validatePlayers(data:readonly Player[]) {
   const ids=new Set<string>(); const ranks=new Set<number>();
   for(const p of data){
-    if(!p.id || ids.has(p.id) || !p.name || !Number.isInteger(p.rank) || p.rank<1 || ranks.has(p.rank) || !Number.isFinite(p.power) || p.power<0 || !classes.some(c=>c.id===p.class) || !['active','inactive'].includes(p.status)) throw new Error('Invalid or duplicate player data');
-    ids.add(p.id);ranks.add(p.rank);
+    if(!p.id || ids.has(p.id) || !p.name || (p.rank===null || p.power===null ? p.rank!==null || p.power!==null || p.status!=='inactive' : !Number.isInteger(p.rank) || p.rank<1 || ranks.has(p.rank) || !Number.isFinite(p.power) || p.power<0) || !classes.some(c=>c.id===p.class) || !['active','inactive'].includes(p.status)) throw new Error('Invalid or duplicate player data');
+    ids.add(p.id);if(p.rank!==null)ranks.add(p.rank);
   }
 }
 export function validateLineup(value:unknown):value is ReadonlyLineup {

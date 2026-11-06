@@ -11,7 +11,7 @@ export const group=(l:Lineup,d:Destination)=>d==='reserves'?l.reserves:l.teams[N
 export const location=(l:Lineup,id:string)=>destinations.find(d=>group(l,d).includes(id));
 export function generateTopActive():Lineup {
   const chosen=[...players].filter(p=>p.status==='active').sort((a,b)=>b.power-a.power||a.rank-b.rank).slice(0,16).map(p=>p.id);
-  return {teams:Array.from({length:4},(_,i)=>chosen.slice(i*4,i*4+4)),reserves:[...players].sort((a,b)=>a.rank-b.rank).filter(p=>!chosen.includes(p.id)).map(p=>p.id)};
+  return {teams:Array.from({length:4},(_,i)=>chosen.slice(i*4,i*4+4)),reserves:[...players].sort((a,b)=>(a.rank??Infinity)-(b.rank??Infinity)).filter(p=>!chosen.includes(p.id)).map(p=>p.id)};
 }
 export function movePlayer(current:Lineup,id:string,destination:Destination,target?:string):{lineup:Lineup;error?:string} {
   const source=location(current,id);

@@ -44,7 +44,7 @@ Normally edit `src/data/players.ts`: stable ID, server rank, current name, numer
 
 ## Updating the official lineup
 
-Normally edit `src/data/officialLineup.ts`, separately from player objects. Update assignments/order and the official version/date. All 30 IDs must occur exactly once, teams must contain no more than four IDs, and the initial official source excludes inactive players. Maintenance loop: experiment on the canonical public site, export Draft JSON, paste it to Codex, update official source and planning context, run validation, then commit/push main. Cloudflare Pages automatically deploys the primary site; GitHub Pages deploys the secondary site.
+Normally edit `src/data/officialLineup.ts`, separately from player objects. Update assignments/order and the official version/date. All current roster IDs must occur exactly once, teams must contain no more than four IDs, and the initial official source excludes inactive players. Maintenance loop: experiment on the canonical public site, export Draft JSON, paste it to Codex, update official source and planning context, run validation, then commit/push main. Cloudflare Pages automatically deploys the primary site; GitHub Pages deploys the secondary site.
 
 ## Changing seasons/classes
 

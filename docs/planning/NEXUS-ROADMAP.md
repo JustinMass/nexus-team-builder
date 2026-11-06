@@ -4,11 +4,11 @@
 - Repo: JustinMass/nexus-team-builder
 - Base/working branch: main
 - Tracking branch: origin/main
-- Current implementation base: 0d4d437304c38869d353dd998d3faeb254f5b63f (hosting retirement); the current scoped official-lineup update is the commit containing version 2026-10-08.2. Resolve the latest full SHA with git rev-parse HEAD rather than storing a self-referential commit hash.
+- Current checkpoint: the commit on main containing official version 2026-11-05.1 (parent baseline 0847eeb50157723bb8eeaa8f85a2741742ba7413). Resolve the checkpoint SHA with git log -1 --format=%H -- src/data/officialLineup.ts.
 - Last completed plan: [001-initial-team-builder.md](plans/001-initial-team-builder.md)
 - Active plan: none; Plan 001 complete
 - Next expected work: STOP; await explicit user scope. No Plan 002 created or executed.
-- Last validation (official lineup update, 2026-10-08): npm test 52 passed / 0 failed; npm run typecheck, npm run build (including canonical validation) and git diff --check PASS. Approved assignments/reserve ordering have an exact regression; totals, compositions, moves, reset, UI and Discord expectations are current. Rankings/player facts, UI behavior and hosting settings are unchanged. Lint and a separate validate script are not configured. Cloudflare's user-provided production view confirms automatic main deployments enabled and successful deployment of the preceding hosting-cleanup checkpoint.
+- Last validation (November 5 rankings refresh): 57 tests passed; typecheck, production build, canonical data validation, and git diff --check passed. Lint is not configured.
 - Deployment URL/status: canonical production https://nexus-team-builder.pages.dev/ (HTTP 200 verified); secondary/fallback https://justinmass.github.io/nexus-team-builder/. ChatGPT Sites is retired/private: owner-only custom access verified, no viewer groups or external visitors; unauthenticated old-URL request returned HTTP 401. Existing project preserved, no replacement or republication.
 
 ## Hosting authority
@@ -20,24 +20,24 @@ Retired ChatGPT Sites hostname (management/history only, not a public destinatio
 Automatically read roadmap and active plan before substantive work. Code/tests/data are executable truth; roadmap is scope/history/continuity truth. Important context lives in the repository, not only chat. One plan is one logical chunk; update it instead of replacing it. Commit planning and implementation together when practical. Stop before the next plan.
 
 ## Product invariants
-Sword x Staff Nexus Tournament: four teams of at most four players, with all other players in ordered reserves. Official assignments are maintained separately from rankings and may be chosen manually by the maintainer. The initial Plan-001 lineup used the 16 highest-power active players; the optional top-active generator still skips inactive players generically. Morganna remains rank 16, 29.8M, Templar, inactive, in official reserves; SeukuMiyadora remains the 16th active player by power but is now an official reserve. Manual inactive assignment in custom drafts is allowed with a persistent badge.
+Sword x Staff Nexus Tournament: four teams of at most four players, with all other players in ordered reserves. Official assignments are maintained separately from rankings and may be chosen manually by the maintainer. The initial Plan-001 lineup used the 16 highest-power active players; the optional top-active generator still skips inactive players generically. The current roster has 38 ranked active players and one inactive legacy reserve, Morganna (Templar), whose current rank and power are unknown. Totals and averages exclude unknown power. Manual inactive assignment in custom drafts is allowed with a persistent badge.
 
-Current official version 2026-10-08.2 (October 8, 2026) matches the user's approved exported assignment and ordering:
-- Team 1: PapiJ, Morgause, Flowzirrah, Kevon — 149.9M.
-- Team 2: Mookie, MrButtLips, Maciel, Caliman — 147.2M.
-- Team 3: Sypher, AmeliaKitty, KeresChar, Lobuz — 124.2M.
-- Team 4: KsHa, Creggers, Herbstwind, Anc1ent — 122.4M.
-- Reserves: Morganna, Marisze, KitKat, JFG, SeukuMiyadora, Mdnght, Serfenox, CritFricker, aceek, NaChile, Kankudai, Saage, KingRunner, RedGoat.
+Current official version 2026-11-05.1 (November 5, 2026) assigns ranks 1–16 in order:
+- Team 1: PapiJ, Mookie, MrButtLips, Flowzirrah — 403.0M.
+- Team 2: MidnightAria, Sypher, Creggers, AmeliaKitty — 321.0M.
+- Team 3: Marisze, KitKat, KeresChar, Maciel — 298.6M.
+- Team 4: JFG, SeukuMiyadora, Serfenox, critify — 281.1M.
+- Reserves: ranks 17–38 in order, followed by Morganna.
 
-All totals are computed at runtime. Historical initial Plan-001 totals were 175.7M, 135.0M, 125.5M and 120.2M. Player rankings/power/classes/status are unchanged by this official assignment update. Saved personal drafts and shared links retain their own assignments; Reset to Official loads the current official lineup. No Plan 002 created or executed.
+All totals are computed at runtime. Historical initial Plan-001 totals were 175.7M, 135.0M, 125.5M and 120.2M. Drafts and shared links with the current roster retain their assignments. Incompatible October drafts or links are rejected safely; Reset to Official loads the current official lineup.
 
 Official imported assignment is immutable. Browser custom/shared state never publishes an official change. Full-team player-target drops swap; full-team background drops reject. Versioned validated local drafts and URL hashes encode IDs/ordering only, never player facts. Discord export reflects visible state and inactive status. No backend/database/authentication for v1.
 
 ## Canonical sources
 - src/config/season.ts: current T5 classes, prior T4 mapping, canonical colors and Discord emojis. Templar #FD8805, Ravager #FF6162, Magister #658BFA, Prophet #44D1AB.
-- src/data/players.ts: supplied current 30 player IDs/ranks/names/power in millions/class/status.
+- src/data/players.ts: 38 current ranked players and one unranked inactive reserve, with stable IDs, display names, power in millions, class and status.
 - src/data/officialLineup.ts: separate official assignments and version/date.
-- Source prompt: user-supplied current rankings and requirements, 2026-10-08. No raw screenshots are tracked.
+- Source prompt: user-supplied November 5, 2026 server ranking snapshot; podium classes retained from the previous canonical data. No raw screenshots are tracked.
 
 ## Completed / planned chunks
 001 — initial team builder, sharing, exports, planning and publication (complete). Four team panels and reserves; safe DnD with full-team targeted swaps; mouse/touch/keyboard and selectors; official/custom/shared labels; undo/redo/reset; validated storage; deterministic share hashes; Discord and maintainer exports; source data and planning; original public Sites and automatic GitHub Pages deployment. The original Sites hosting is historical and superseded by the current hosting authority above.

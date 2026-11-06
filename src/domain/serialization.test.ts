@@ -15,7 +15,23 @@ it('malformed URL falls back to saved draft with warning',()=>{const s=storage()
 it('oversized shared input rejects',()=>expect(decodeShare('#lineup='+ 'x'.repeat(10001))).toBeUndefined());
 it('unknown IDs in hash reject',()=>{const l=cloneOfficial();l.teams[0][0]='ghost';expect(decodeShare(encodeShare(l))).toBeUndefined()});
 it('shared URL takes precedence without reading persisted draft',()=>{const s=storage();saveDraft(s,movePlayer(cloneOfficial(),'papij','reserves').lineup);expect(loadInitial(encodeShare(cloneOfficial()),s).mode).toBe('shared');expect(loadInitial(encodeShare(cloneOfficial()),s).lineup).toEqual(cloneOfficial())});
-it('Discord includes computed totals/classes',()=>{const d=discordExport(cloneOfficial());expect(d).toContain('Team 1 — 149.9M Total');expect(d).toContain('2 Templars / 1 Magister / 1 Prophet');expect(d).toContain(':blue_circle: **PapiJ** — 51.2M — Magister')});
-it('Discord reflects edited visible lineup',()=>{const d=discordExport(movePlayer(cloneOfficial(),'papij','reserves').lineup);expect(d).toContain('Team 1 — 98.7M Total');expect(d.slice(d.indexOf('Reserve Pool'))).toContain('**PapiJ**')});
-it('inactive Discord suffix',()=>expect(discordExport(cloneOfficial())).toContain('**Morganna** — 29.8M — Templar — INACTIVE'));
-it('composition singular and plural grammar for all classes',()=>{expect(composition(['mrbuttlips','ksha','papij','morgause'])).toBe('1 Templar / 1 Ravager / 1 Magister / 1 Prophet');expect(composition(['mrbuttlips','flowzirrah','ksha','marisze','papij','mookie','morgause','maciel'])).toBe('2 Templars / 2 Ravagers / 2 Magisters / 2 Prophets')});
+it('Discord includes computed totals/classes',()=>{const d=discordExport(cloneOfficial());expect(d).toContain('Team 1 — 403.0M Total');expect(d).toContain('2 Templars / 2 Magisters');expect(d).toContain(':blue_circle: **PapiJ** — 119.0M — Magister')});
+it('Discord reflects edited visible lineup',()=>{const d=discordExport(movePlayer(cloneOfficial(),'papij','reserves').lineup);expect(d).toContain('Team 1 — 284.0M Total');expect(d.slice(d.indexOf('Reserve Pool'))).toContain('**PapiJ**')});
+it('inactive Discord suffix',()=>expect(discordExport(cloneOfficial())).toContain('**Morganna** — Power unknown — Templar — INACTIVE'));
+it('composition singular and plural grammar for all classes',()=>{expect(composition(['mrbuttlips','ksha','papij','midnightaria'])).toBe('1 Templar / 1 Ravager / 1 Magister / 1 Prophet');expect(composition(['mrbuttlips','flowzirrah','ksha','marisze','papij','mookie','midnightaria','maciel'])).toBe('2 Templars / 2 Ravagers / 2 Magisters / 2 Prophets')});
+it('November Discord export preserves Cyrillic and updated classes',()=>{
+  const output=discordExport(cloneOfficial());
+  expect(output).toContain('**убиатор** — 62.1M — Ravager');
+  expect(output).toContain('**AmeliaKitty** — 76.1M — Templar');
+  expect(output).toContain('**Caliman** — 59.1M — Magister');
+});
+it('removed October IDs invalidate drafts and shared hashes safely',()=>{
+  const s=storage(), stale=cloneOfficial();
+  stale.teams[0][0]='morgause';
+  s.setItem(storageKey,serializeDraft(stale));
+  const hash=encodeShare(stale);
+  expect(decodeShare(hash)).toBeUndefined();
+  for(const input of ['',hash]){
+    expect(loadInitial(input,s)).toMatchObject({mode:'official',lineup:cloneOfficial(),warning:expect.any(String)});
+  }
+});
