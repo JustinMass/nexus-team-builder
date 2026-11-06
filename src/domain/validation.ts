@@ -9,15 +9,16 @@ export function validatePlayers(data:readonly Player[]) {
     ids.add(p.id);if(p.rank!==null)ranks.add(p.rank);
   }
 }
+export const overCapacityTeams=(lineup:ReadonlyLineup)=>lineup.teams.flatMap((team,index)=>team.length>4?[index+1]:[]);
 export function validateLineup(value:unknown):value is ReadonlyLineup {
   if(!value || typeof value!=='object')return false;
   const l=value as ReadonlyLineup;
-  if(!Array.isArray(l.teams)||l.teams.length!==4||!Array.isArray(l.reserves)||l.teams.some(t=>!Array.isArray(t)||t.length>4))return false;
+  if(!Array.isArray(l.teams)||l.teams.length!==4||!Array.isArray(l.reserves)||l.teams.some(t=>!Array.isArray(t)))return false;
   const ids=[...l.teams.flat(),...l.reserves];
   return ids.length===players.length && new Set(ids).size===ids.length && ids.every(id=>typeof id==='string'&&Object.hasOwn(playerById,id));
 }
 export function validateCanonical(){
   validatePlayers(players);
-  if(!validateLineup(officialLineup))throw new Error('Invalid official lineup');
+  if(!validateLineup(officialLineup)||overCapacityTeams(officialLineup).length)throw new Error('Invalid official lineup');
   if(officialLineup.teams.flat().some(id=>playerById[id].status==='inactive'))throw new Error('Inactive player in initial official lineup');
 }

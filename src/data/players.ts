@@ -43,6 +43,5 @@ export const players: readonly Player[] = Object.freeze([
   {id:'gwenivera',rank:36,name:'Gwenivera',power:58.4,class:'templar',status:'active'},
   {id:'logi',rank:37,name:'Logi',power:58.4,class:'prophet',status:'active'},
   {id:'bilbo',rank:38,name:'Bilbo',power:57.9,class:'prophet',status:'active'},
-  {id:'morganna',rank:null,name:'Morganna',power:null,class:'templar',status:'inactive'},
 ].map(p=>Object.freeze(p)) as Player[]);
 export const playerById=Object.freeze(Object.fromEntries(players.map(p=>[p.id,p]))) as Readonly<Record<string,Player>>;

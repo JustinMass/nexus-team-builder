@@ -6,16 +6,28 @@ import { storageKey, encodeShare } from './domain/serialization';
 import { cloneOfficial, movePlayer } from './domain/lineup';
 beforeEach(()=>{localStorage.clear();window.history.replaceState(null,'','/');vi.stubGlobal('ResizeObserver',class {observe(){}unobserve(){}disconnect(){}})});
 afterEach(()=>{cleanup();vi.unstubAllGlobals()});
-it('starts official with computed totals and inactive reserve badge',()=>{render(<App/>);expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(screen.getByText('403.0')).toBeTruthy();expect(within(screen.getByTestId('player-morganna')).getByText('Inactive')).toBeTruthy()});
+it('starts official with computed totals without Morganna',()=>{render(<App/>);expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(screen.getByText('364.6')).toBeTruthy();expect(screen.queryByTestId('player-morganna')).toBeNull()});
 it('selector move saves a custom draft and undo restores official',()=>{render(<App/>);fireEvent.change(screen.getByLabelText('Move PapiJ'),{target:{value:'reserves'}});expect(screen.getByText('CUSTOM DRAFT')).toBeTruthy();expect(JSON.parse(localStorage.getItem(storageKey)!).reserves).toContain('papij');fireEvent.click(screen.getByRole('button',{name:'Undo'}));expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(localStorage.getItem(storageKey)).toBeNull()});
-it('full team selector rejection gives understandable feedback',()=>{render(<App/>);fireEvent.change(screen.getByLabelText('Move Mdnght'),{target:{value:'team-0'}});expect(screen.getByRole('status',{name:'Lineup feedback'}).textContent).toMatch(/full/i);expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy()});
+it('persists an oversized draft and blocks exports until the team is trimmed',()=>{
+  const view=render(<App/>);
+  fireEvent.change(screen.getByLabelText('Move Mdnght'),{target:{value:'team-0'}});
+  view.unmount();
+  render(<App/>);
+  expect(screen.getByText('CUSTOM DRAFT')).toBeTruthy();
+  expect(within(screen.getByRole('region',{name:'Team 1'})).getByText('5 / 4')).toBeTruthy();
+  expect(screen.getByText(/Team 1: move extra players/)).toBeTruthy();
+  fireEvent.click(screen.getByText('Maintainer tools'));
+  const buttons=['Copy Discord Format','Share Configuration','Export Draft JSON'].map(name=>screen.getByRole<HTMLButtonElement>('button',{name}));
+  expect(buttons.every(button=>button.disabled)).toBe(true);
+  fireEvent.change(screen.getByLabelText('Move Mdnght'),{target:{value:'reserves'}});
+  expect(buttons.every(button=>!button.disabled)).toBe(true);
+});
 it('refresh restores custom draft',()=>{localStorage.setItem(storageKey,JSON.stringify({v:1,...movePlayer(cloneOfficial(),'papij','reserves').lineup}));render(<App/>);expect(screen.getByText('CUSTOM DRAFT')).toBeTruthy();expect((screen.getByLabelText('Move PapiJ') as HTMLSelectElement).value).toBe('reserves')});
 it('malformed storage shows warning without crashing',()=>{localStorage.setItem(storageKey,'oops');render(<App/>);expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(screen.getByRole('status',{name:'Lineup feedback'}).textContent).toMatch(/invalid/i)});
-it('shared lineup label and reset current official',()=>{window.history.replaceState(null,'','/'+encodeShare(movePlayer(cloneOfficial(),'papij','reserves').lineup));render(<App/>);expect(screen.getByText('CUSTOM SHARED LINEUP')).toBeTruthy();fireEvent.click(screen.getByRole('button',{name:'Reset to Current Official'}));expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(window.location.hash).toBe('');expect(screen.getByText('403.0')).toBeTruthy();expect(screen.getByText('v2026-11-05.1')).toBeTruthy()});
+it('shared lineup label and reset current official',()=>{window.history.replaceState(null,'','/'+encodeShare(movePlayer(cloneOfficial(),'papij','reserves').lineup));render(<App/>);expect(screen.getByText('CUSTOM SHARED LINEUP')).toBeTruthy();fireEvent.click(screen.getByRole('button',{name:'Reset to Current Official'}));expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy();expect(window.location.hash).toBe('');expect(screen.getByText('364.6')).toBeTruthy();expect(screen.getByText('v2026-11-05.2')).toBeTruthy()});
 it('discard saved draft resets and deletes stored state',()=>{localStorage.setItem(storageKey,JSON.stringify({v:1,...movePlayer(cloneOfficial(),'papij','reserves').lineup}));render(<App/>);fireEvent.click(screen.getByText('Maintainer tools'));fireEvent.click(screen.getByRole('button',{name:'Discard Saved Draft'}));expect(localStorage.getItem(storageKey)).toBeNull();expect(screen.getByText('OFFICIAL LINEUP')).toBeTruthy()});
-it('clipboard denial exposes selectable Discord export',async()=>{Object.defineProperty(navigator,'clipboard',{value:{writeText:()=>Promise.reject(Error('denied'))},configurable:true});render(<App/>);fireEvent.click(screen.getByRole('button',{name:'Copy Discord Format'}));expect(await screen.findByLabelText('Copy text manually')).toBeTruthy();expect((screen.getByLabelText('Copy text manually') as HTMLTextAreaElement).value).toContain('403.0M Total')});
-it('renders the Cyrillic reserve and unknown inactive power',()=>{
+it('clipboard denial exposes selectable Discord export',async()=>{Object.defineProperty(navigator,'clipboard',{value:{writeText:()=>Promise.reject(Error('denied'))},configurable:true});render(<App/>);fireEvent.click(screen.getByRole('button',{name:'Copy Discord Format'}));expect(await screen.findByLabelText('Copy text manually')).toBeTruthy();expect((screen.getByLabelText('Copy text manually') as HTMLTextAreaElement).value).toContain('364.6M Total')});
+it('renders the Cyrillic reserve ',()=>{
   render(<App/>);
   expect(within(screen.getByTestId('player-ubiator')).getByText('убиатор')).toBeTruthy();
-  expect(within(screen.getByTestId('player-morganna')).getByTitle('Power unknown').textContent).toBe('—');
 });

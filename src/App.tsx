@@ -28,7 +28,7 @@ export default function App(){
   const assigned=state.present.teams.flat(),activeCount=players.filter(p=>p.status==='active').length;
   return <div className="app-shell"><LineupHeader state={state} onUndo={()=>dispatch({type:'undo'})} onRedo={()=>dispatch({type:'redo'})} onReset={reset}/>
     <main><div className="overview"><div className="summary-stats"><div><Shield size={17}/><strong>4</strong><span>teams</span></div><div><Users size={17}/><strong>{assigned.length}<small>/16</small></strong><span>assigned</span></div><div><strong>{totalPower(assigned).toFixed(1)}<small>M</small></strong><span>lineup power</span></div><div className="roster-count"><strong>{activeCount}</strong><span>active players</span></div></div><ExportControls lineup={state.present} onDiscard={reset}/></div>
-      <div className="board-heading"><ClassLegend/><p><GripVertical size={14}/>Drag to move · drop on a player in a full team to swap</p></div>
+      <div className="board-heading"><ClassLegend/><p><GripVertical size={14}/>Drop on team space to add · drop on a player in a full team to swap</p></div>
       {(state.error||warning)&&<div className="warning" role="status" aria-label="Lineup feedback">{state.error||warning}</div>}
       <DndContext sensors={sensors} collisionDetection={collisions} onDragStart={e=>setDragged(String(e.active.id))} onDragCancel={()=>setDragged(null)} onDragEnd={onDragEnd}>
         <div className="lineup-board"><div className="team-grid">{state.present.teams.map((ids,i)=><TeamPanel key={i} ids={ids} index={i} onMove={onMove}/>)}</div><ReservePool ids={state.present.reserves} onMove={onMove}/></div>

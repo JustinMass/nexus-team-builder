@@ -4,11 +4,11 @@
 - Repo: JustinMass/nexus-team-builder
 - Base/working branch: main
 - Tracking branch: origin/main
-- Current checkpoint: the commit on main containing official version 2026-11-05.1 (parent baseline 0847eeb50157723bb8eeaa8f85a2741742ba7413). Resolve the checkpoint SHA with git log -1 --format=%H -- src/data/officialLineup.ts.
+- Current checkpoint: the commit on main containing official version 2026-11-05.2 (parent baseline bc1e3a6434ce9014607ac07ab237435d205e564e). Resolve the checkpoint SHA with git log -1 --format=%H -- src/data/officialLineup.ts.
 - Last completed plan: [001-initial-team-builder.md](plans/001-initial-team-builder.md)
 - Active plan: none; Plan 001 complete
 - Next expected work: STOP; await explicit user scope. No Plan 002 created or executed.
-- Last validation (November 5 rankings refresh): 57 tests passed; typecheck, production build, canonical data validation, and git diff --check passed. Lint is not configured.
+- Last validation (official lineup and draft capacity update): 52 tests passed; typecheck, production build, canonical data validation, and git diff --check passed. Lint is not configured.
 - Deployment URL/status: canonical production https://nexus-team-builder.pages.dev/ (HTTP 200 verified); secondary/fallback https://justinmass.github.io/nexus-team-builder/. ChatGPT Sites is retired/private: owner-only custom access verified, no viewer groups or external visitors; unauthenticated old-URL request returned HTTP 401. Existing project preserved, no replacement or republication.
 
 ## Hosting authority
@@ -20,22 +20,22 @@ Retired ChatGPT Sites hostname (management/history only, not a public destinatio
 Automatically read roadmap and active plan before substantive work. Code/tests/data are executable truth; roadmap is scope/history/continuity truth. Important context lives in the repository, not only chat. One plan is one logical chunk; update it instead of replacing it. Commit planning and implementation together when practical. Stop before the next plan.
 
 ## Product invariants
-Sword x Staff Nexus Tournament: four teams of at most four players, with all other players in ordered reserves. Official assignments are maintained separately from rankings and may be chosen manually by the maintainer. The initial Plan-001 lineup used the 16 highest-power active players; the optional top-active generator still skips inactive players generically. The current roster has 38 ranked active players and one inactive legacy reserve, Morganna (Templar), whose current rank and power are unknown. Totals and averages exclude unknown power. Manual inactive assignment in custom drafts is allowed with a persistent badge.
+Sword x Staff Nexus Tournament: four teams and ordered reserves. Official lineups and exported configurations allow at most four players per team; local drafts may temporarily exceed that limit. Official assignments are maintained separately from rankings and may be chosen manually by the maintainer. The initial Plan-001 lineup used the 16 highest-power active players; the optional top-active generator still skips inactive players generically. The current roster has 38 ranked active players; Morganna was removed after leaving the game.
 
-Current official version 2026-11-05.1 (November 5, 2026) assigns ranks 1–16 in order:
-- Team 1: PapiJ, Mookie, MrButtLips, Flowzirrah — 403.0M.
-- Team 2: MidnightAria, Sypher, Creggers, AmeliaKitty — 321.0M.
-- Team 3: Marisze, KitKat, KeresChar, Maciel — 298.6M.
-- Team 4: JFG, SeukuMiyadora, Serfenox, critify — 281.1M.
-- Reserves: ranks 17–38 in order, followed by Morganna.
+Current official version 2026-11-05.2 (November 5, 2026) uses the approved assignments:
+- Team 1: PapiJ, Flowzirrah, MidnightAria, Marisze — 364.6M.
+- Team 2: Mookie, MrButtLips, SeukuMiyadora, Creggers — 345.9M.
+- Team 3: AmeliaKitty, Sypher, KeresChar, KitKat — 309.7M.
+- Team 4: Maciel, Serfenox, critify, Kevon — 276.0M.
+- Reserves: remaining ranked players in order, with JFG placed last as requested.
 
-All totals are computed at runtime. Historical initial Plan-001 totals were 175.7M, 135.0M, 125.5M and 120.2M. Drafts and shared links with the current roster retain their assignments. Incompatible October drafts or links are rejected safely; Reset to Official loads the current official lineup.
+All totals are computed at runtime. Historical initial Plan-001 totals were 175.7M, 135.0M, 125.5M and 120.2M. Drafts and shared links with the current roster retain their assignments. Drafts or links containing removed roster IDs are rejected safely; Reset to Official loads the current official lineup.
 
-Official imported assignment is immutable. Browser custom/shared state never publishes an official change. Full-team player-target drops swap; full-team background drops reject. Versioned validated local drafts and URL hashes encode IDs/ordering only, never player facts. Discord export reflects visible state and inactive status. No backend/database/authentication for v1.
+Official imported assignment is immutable. Browser custom/shared state never publishes an official change. Full-team player-target drops swap; selectors and background drops can add extra players. Local storage preserves oversized drafts. Discord copy, share links, and JSON export are blocked until teams are within the limit. Versioned validated local drafts and URL hashes encode IDs/ordering only, never player facts. Discord export reflects visible state and inactive status. No backend/database/authentication for v1.
 
 ## Canonical sources
 - src/config/season.ts: current T5 classes, prior T4 mapping, canonical colors and Discord emojis. Templar #FD8805, Ravager #FF6162, Magister #658BFA, Prophet #44D1AB.
-- src/data/players.ts: 38 current ranked players and one unranked inactive reserve, with stable IDs, display names, power in millions, class and status.
+- src/data/players.ts: 38 current ranked players, with stable IDs, display names, power in millions, class and status.
 - src/data/officialLineup.ts: separate official assignments and version/date.
 - Source prompt: user-supplied November 5, 2026 server ranking snapshot; podium classes retained from the previous canonical data. No raw screenshots are tracked.
 

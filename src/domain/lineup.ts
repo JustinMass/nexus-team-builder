@@ -23,8 +23,7 @@ export function movePlayer(current:Lineup,id:string,destination:Destination,targ
   if(source===destination){
     if(targetIndex<0)return {lineup:current};
     from.splice(sourceIndex,1);from.splice(targetIndex,0,id);
-  }else if(destination!=='reserves'&&to.length>=4){
-    if(targetIndex<0)return {lineup:current,error:'This team is full. Drop onto a player to swap, or move someone to reserves first.'};
+  }else if(destination!=='reserves'&&to.length>=4&&targetIndex>=0){
     from[sourceIndex]=to[targetIndex];to[targetIndex]=id;
   }else{
     from.splice(sourceIndex,1);to.splice(targetIndex<0?to.length:targetIndex,0,id);

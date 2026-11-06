@@ -1,6 +1,6 @@
 # Nexus Team Builder
 
-Public Sword x Staff Nexus Tournament utility: four teams of up to four players, ordered reserves, local custom drafts, shared links and Discord markdown. GitHub is the authoritative source; official updates require a repository commit.
+Public Sword x Staff Nexus Tournament utility: four teams with a four-player limit for exports, ordered reserves, local custom drafts, shared links and Discord markdown. GitHub is the authoritative source; official updates require a repository commit.
 
 - Primary / canonical public site: https://nexus-team-builder.pages.dev/
 - Secondary / fallback GitHub Pages: https://justinmass.github.io/nexus-team-builder/
@@ -28,7 +28,7 @@ React + TypeScript + Vite, @dnd-kit, Lucide icons and Vitest. No backend, databa
 
 ## Official vs custom authority
 
-Official source is deeply frozen and cloned into browser working state. Editing changes the label to CUSTOM DRAFT and never mutates or publishes source. Morganna stays inactive in the catalog and starts in reserves. Default top-active generation skips any inactive player; manual inactive assignment is allowed with a visible badge. Team/background moves into full teams reject; dropping on a specific player swaps exact slots. Drag handles support mouse, touch and keyboard; team selectors provide an accessible alternative. Undo/redo retain up to 50 changes. Reset to Official and Discard Saved Draft reset the visible configuration, clear history and remove the local saved draft.
+Official source is deeply frozen and cloned into browser working state. Editing changes the label to CUSTOM DRAFT and never mutates or publishes source. The roster has 38 ranked players. During editing, selectors and team-background drops can add players to full teams; dropping onto a specific player in a full team swaps exact slots. Oversized drafts stay saved locally, but Discord copy, sharing, and JSON export require every team to be at or under four players. Drag handles support mouse, touch and keyboard; team selectors provide an accessible alternative. Undo/redo retain up to 50 changes. Reset to Official and Discard Saved Draft reset the visible configuration, clear history and remove the local saved draft.
 
 Custom drafts persist under `nexus-team-builder:draft:v1`. Schema and all IDs, uniqueness, complete coverage and team capacities are validated on load. Invalid or denied storage cannot crash the application; it reports a warning and falls back safely. Shared URLs take precedence and do not overwrite an existing personal draft until edited.
 
